@@ -6,47 +6,15 @@ Python 多元運算思維設計
 > Python 多元運算思維設計- 程序式、物件式與函數式程設
 > *Python Multimodal Thinking Design - Procedural, Object-Oriented, and Functional Programming*
 
-
-**第一章：程設範式簡介**
-- 程設範式的概念
-- 多元運算思維的重要性
-- Python 多元運算思維？
-
-**第二章：程序式程設**
-- 理解程序式程設
-- 函數和程序
-- 程序式程設中的控制結構
-- Python 程序式程式碼範例
-
-**第三章：物件導向程設（OOP）**
-- 物件導向程程設簡介
-- Python中的類別
-- 繼承和多型性
-- Python中的OOP範例
-
-**第四章：函數式程設（FP）**
-- 探索函數式程設
-- 純函數和不可變性
-- 高階函數和匿名函數
-- Python 中的函數式程式範例
-
-**第五章：整合多種程設範式**
-- 結合程序式、物件式和函數式方法
-- 多元式思維的最佳實踐
-- 案例研究和實際範例
-
-這個章節規劃將專注於介紹Python中的程序式、面向對象和函數式程設範式，以及如何整合它們，以實現多模式思維。每個章節都可以包括理論概念、範例程式碼、練習題和進一步閱讀建議，以幫助學生深入理解主題。這個簡化的結構可以根據你的需求進一步調整和擴展。
-
----
+程式設計有很多種思維的作法，例如程序(procedure-based)的方式- 程式是由許多的程序所構成; 例如物件導向(object-oriented)的方式- 其設計的主體是物件; 又例如本章所要介紹的，程式的主體是一個個的函數(function programming)。
 
 # 函數式程設
 
-函數式程設（Functional Programming，簡稱FP）是一種程設範式，它主要基於數學中的函數概念和函數的應用。在函數式程設中，計算被視為一系列函數之間的數學變換，而不是一系列狀態的改變。以下是函數式程設的一些主要特點：
+函數式程設（Functional Programming，簡稱 FP）是一種程設範式(programming paradigm)，它主要基於數學中的函數概念和函數的應用。在函數式程設中，計算被視為一系列函數之間的數學變換，而不是一系列狀態的改變。以下是函數式程設的一些主要特點：
 
 
 ## 函數是主角
 
-* 一等公民 (first class function)
 * 高階函式 (high order function)
 * 匿名函示 (anonymous function)
 * 純函式 (pure function)
@@ -67,26 +35,20 @@ Python 多元運算思維設計
 
 ## 不可變性（Immutability）：
 
-```python
-# 不可變的字串範例
-name = "Alice"
-new_name = name.upper()  # 建立一個新的字串，而不是修改原始字串
-print(name)      # 仍然是 "Alice"
-print(new_name)  # "ALICE"
-```
-
 不可變性（Immutability）是函數式程設的一個重要概念，它強調資料一旦被建立就不能被修改。以下是更詳細的例子以及反例，來凸顯不可變性的優點：
 
 **例子1：使用不可變性的字串**
 
+先來看以下的例子：
 ```python
+# 不可變的字串範例
 name = "Alice"
-new_name = name + " Johnson"  # 建立一個新的字串，不修改原始字串
-print(name)  # 原始字串仍然是 "Alice"
-print(new_name)  # "Alice Johnson"
+new_name = name.upper()  # 建立一個新的字串，而不是修改原始字串
+print(name)              # 仍然是 "Alice"
+print(new_name)          # "ALICE"
 ```
 
-在這個例子中，我們將原始字串 `name` 與其他字串相結合，建立了一個新的字串 `new_name`，而原始字串 `name` 保持不變。這體現了字串的不可變性，因為我們無法直接修改 `name`，而是建立了一個新的字串。
+`name.upper()` 並不會改變 name 本身的值，而是回傳一個其值的大寫。事實上 str 字串是一個不可變的物件，其所提供的任何方法都不會改變其值，只會回傳一個新的值。如此確保字串的不可變性，提升程式的可維護性。
 
 **反例1：使用可變性的列表**
 
@@ -95,30 +57,46 @@ my_list = [1, 2, 3, 4]
 my_list.append(5)  # 直接修改了列表，添加了一個新元素
 print(my_list)  # [1, 2, 3, 4, 5]
 ```
+與之相法的，list (列表) 是一個可變物件。在這個反例中，我們使用可變的列表，直接在原始列表上添加了一個新元素。`my_list` 在呼叫 `append()` 之後，其狀態由原有的 `[1,2,3,4]` 變成 `[1,2,3,4,5]`。
 
-在這個反例中，我們使用可變的列表，直接在原始列表上添加了一個新元素。這樣的操作可能會導致意外的狀態變化，因為原始列表被修改，並且在不同的部分中可能會產生難以追蹤的副作用。
+如果我們要保留原有列表的狀態，可以在呼叫之前先做一個複製(`.copy()`)。如下：
+
+```
+my_list = [1, 2, 3, 4]
+same_list = my_list.copy()
+my_list.append(5)
+print (same_list)
+```
+
+注意：一些人可能會用 `same_list = my_list` 但這樣兩個變數都會指到相同的空間，導致 `same_list` 也跟著改變了。
 
 **例子2：不可變性的元組**
 
 ```python
-point = (3, 4)
-# point[0] = 5  # 此行程式碼將引發錯誤，元組不可修改
+point = (3, 4)  # tuple (元組)
 print(point[0])  # 3
+# point[0] = 5  # 此行程式碼將引發錯誤，元組不可修改
 ```
 
-這個例子展示了元組的不可變性。一旦建立了元組，就無法修改其中的元素。這有助於確保資料的穩定性，特別是在多線程環境中。
+這個例子展示了元組的不可變性。一旦建立了元組，就無法修改其中的元素。這有助於確保資料的穩定性，特別是在多線程環境中。如果你只想讀取一群資料，而非修改它，利用元組來設計，而非列表是不錯的方式。
 
 **反例2：使用可變性的字典**
 
+如同 list, dict 也是可變的：
+
 ```python
-person = {"name": "Alice", "age": 30}
-person["age"] = 31  # 直接修改字典中的值
-print(person)  # {'name': 'Alice', 'age': 31}
+alice = {"name": "Alice", "age": 30}
+alice["age"] = 31   # 直接修改字典中的值
+print(alice)        # {'name': 'Alice', 'age': 31}
 ```
 
-在這個反例中，我們使用可變的字典，直接修改了字典中的值。這種操作可能導致難以追蹤的狀態變化，並且在程式碼中引入了不必要的複雜性。
+在這個反例中，我們使用可變的字典，直接修改了字典中的值。這種操作可能導致難以追蹤的狀態變化，並且在程式碼中引入了不必要的複雜性。我們可以透過 .items 生成一個 tuple 物件：
 
-總之，不可變性的主要優點是確保資料的穩定性，減少了程式碼中的錯誤和副作用。它有助於使程式碼更容易理解、測試和調試，並提高了程式碼的可維護性。不可變性也使並行程設更容易，因為不需要擔心多線程之間對資料的競爭。
+```
+alice = {"name": "Alice", "age": 30}
+print (alice.items()) 
+# dict_items([('name', 'Alice'), ('age', 30)])
+```
 
 ### BMI example
 
@@ -126,15 +104,36 @@ print(person)  # {'name': 'Alice', 'age': 31}
 
 ## 純函數（Pure Functions）：
 
+在函數式編程中，純函數（Pure Function）具備以下兩個主要特徵：
+
+1. **相同的輸入總是產生相同的輸出：** 給定相同的輸入，純函數總是返回相同的輸出，而不受程式的狀態或外部因素的影響。這種特性被稱為「引用透明性」(referential transparency)，它使得函數調用的結果可以完全預測，有助於程式的可靠性和測試。
+
+2. **無副作用：** 純函數不應該引起程式狀態的變化，也就是說，在執行時它不應修改任何全域變數、修改輸入參數、印出訊息或執行與計算結果無關的任何可觀察操作。這樣可以避免意外的影響和產生不可預測的行為。
+
+純函數的這兩個特性使其更易於理解、測試和推理。由於純函數不依賴於外部狀態，它們對於並行化和並發性也有天然的支持，因為它們不會導致競爭條件或其他共享狀態問題。
+
+以下是一個簡單的純函數示例：
+
 ```python
-# 純函數範例
 def add(a, b):
     return a + b
+```
 
-result = add(3, 5)  # 沒有副作用，回傳結果
-print(result)  # 8
+這個函數滿足純函數的要求。給定相同的輸入 `a` 和 `b`，它總是返回相同的輸出，而且沒有任何副作用。相反，以下是一個不是純函數的例子：
 
-# 非純函數範例（有副作用）
+```python
+total = 0
+
+def add_with_side_effect(a):
+    global total
+    total += a
+    return total
+```
+
+這個函數有副作用，因為它修改了全域變數 `total`，而且對於相同的輸入 `a`，其輸出也依賴於之前的狀態。
+
+### 非純函數範例（有副作用）
+```
 def add_and_print(a, b):
     result = a + b
     print(result)  # 印出結果，有副作用
@@ -144,7 +143,49 @@ result = add_and_print(3, 5)  # 回傳結果並且印出
 print(result)  # 8
 ```
 
+### Concurrent 
+
+讓我們來看一個例子，說明一個不符合純函數特性的情況，導致並行化和並發性方面的問題。
+
+考慮以下的 Python 函數：
+
+```python
+total = 0
+
+def add_with_side_effect(a):
+    global total
+    total += a
+    return total
+```
+
+這個函數具有副作用，因為它修改了全局變數 `total`。現在，想像有兩個並行的任務（tasks）想要同時執行 `add_with_side_effect` 函數，每個任務都希望根據當前的 `total` 值來進行計算。
+
+```python
+from concurrent.futures import ThreadPoolExecutor
+
+def concurrent_task(task_id, value):
+    result = add_with_side_effect(value)
+    print(f"Task {task_id}: Result = {result}")
+
+# 利用 ThreadPoolExecutor 並行執行兩個任務
+with ThreadPoolExecutor(max_workers=2) as executor:
+    executor.submit(concurrent_task, 1, 5)
+    executor.submit(concurrent_task, 2, 3)
+```
+
+由於 `add_with_side_effect` 函數具有全局狀態的副作用，這兩個任務可能會交錯地修改 `total`，導致計算結果與期望不符。
+
+這個例子中，由於全局變數的共享和修改，並行執行這些任務可能會導致競爭條件（Race Condition）或其他並行性相關的問題。這種情況下，並行化的優勢被破壞，因為函數的結果取決於全局狀態的修改，並可能導致不確定的行為。
+
+在函数式编程中，鼓勵使用不可變函數，以更好地支持並行化，
+
+
 ## 高階函數（Higher-Order Functions）：
+
+> 在函數式程式設計中，高階函數是指將一個或多個函數作為參數和/或傳回一個函數作為其結果的函數。 本質上，它將函數視為一等公民，允許它們像任何其他資料類型一樣傳遞和操作。
+
+Python 支援高階函數，它們在函數式程式設計範式中發揮重要作用。
+
 高階函數在函數式編程中有許多好處，它們可以提高代碼的靈活性、可讀性和可維護性。以下是一些高階函數的好處：
 
 1. **抽象和模塊化：** 高階函數允許你將功能抽象為函數，這樣可以更好地模塊化代碼。通過將功能封裝在函數中，你可以提高代碼的可讀性和可理解性。
@@ -319,7 +360,8 @@ print(new_list)  # [2, 4, 6, 8]
 
 這些範例展示了如何在Python中應用函數式程設的不同概念，包括不可變性、純函數、高階函數、遞歸和避免副作用。這些概念有助於寫出更具可讀性和可維護性的程式碼，並有助於減少錯誤。
 
-## First citizen
+## 一等公民 (first class function)
+
 
 ```python
 from typing import Callable
@@ -356,10 +398,7 @@ if __name__ == "__main__":
 [Functional Programming in Python
 Essential concepts, patterns, and modules (Medium)](https://medium.com/akava/functional-programming-in-python-e492f2ad1e37)
 
-
-
-
-## OOP and FP
+## 物件導向程設與函數式程設
 
 當函數式程設（FP）和物件導向程設（OOP）互補使用時，它們可以在不同層面的應用中發揮作用。以下是一個具體的範例，展示了如何在同一個應用中結合這兩種程設範式：
 
